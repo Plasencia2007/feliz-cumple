@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡UNA SORPRESA PARA TI!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <title>Feliz Cumpleaños Mi Hombrecito ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --gold: #D4AF37;
             --rose-gold: #B76E79;
             --cream: #FFFDD0;
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            --glass: rgba(255, 255, 255, 0.7);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: var(--bg-gradient);
-            color: #444;
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -29,46 +29,40 @@
             perspective: 1500px;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-gradient); }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--rose-gold); }
-
-        /* --- Fondo Animado --- */
-        #celebration-bg {
+        #bg-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
+            background: url('img/bg.png') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.7);
         }
 
-        .floating-heart, .balloon {
+        /* --- Estrellas flotantes --- */
+        .star {
             position: absolute;
-            opacity: 0.3;
-            pointer-events: none;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 10s infinite linear;
         }
 
-        .balloon {
-            font-size: 3rem;
-            animation: sway 6s infinite ease-in-out;
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+            100% { transform: translateY(0) translateX(0); }
         }
 
-        @keyframes sway {
-            0%, 100% { transform: translateY(0) rotate(5deg); }
-            50% { transform: translateY(-20px) rotate(-5deg); }
-        }
-
-        /* --- Sparkles (Efecto Mágico) --- */
+        /* --- Sparkles Mouse --- */
         .sparkle {
             position: absolute;
-            width: 6px; height: 6px;
+            width: 4px; height: 4px;
             background: var(--gold);
             border-radius: 50%;
             pointer-events: none;
             z-index: 1000;
             animation: sparkle-fade 1s forwards;
+            box-shadow: 0 0 10px var(--gold);
         }
 
         @keyframes sparkle-fade {
@@ -76,14 +70,11 @@
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* --- UI Principal --- */
+        /* --- Intro Viewport --- */
         #main-viewport {
             text-align: center;
             z-index: 10;
-            transition: all 1s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #main-viewport.hidden {
@@ -92,31 +83,41 @@
             pointer-events: none;
         }
 
-        #prism-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 40px;
+        .title-18 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            background: linear-gradient(to bottom, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 40px;
         }
 
         #prism-container {
             width: 280px;
             height: 350px;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            margin: 0 auto 40px;
         }
 
         .prism-face {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             backface-visibility: hidden;
             border: 8px solid #fff;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             overflow: hidden;
-            background: white;
         }
 
         .prism-face img { width: 100%; height: 100%; object-fit: cover; }
@@ -124,221 +125,204 @@
         .face-2 { transform: rotateY(120deg) translateZ(82px); }
         .face-3 { transform: rotateY(240deg) translateZ(82px); }
 
-        /* Botón de Desbloqueo */
         #unlock-btn {
-            background: var(--rose-gold);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border: none;
-            padding: 15px 30px;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 15px 40px;
             border-radius: 50px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            letter-spacing: 3px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(183, 110, 121, 0.4);
+            transition: all 0.5s;
+            backdrop-filter: blur(10px);
             opacity: 0;
-            transform: translateX(40px) scale(0.8);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(20px);
             pointer-events: none;
         }
 
         #unlock-btn.visible {
             opacity: 1;
-            transform: translateX(0) scale(1);
+            transform: translateY(0);
             pointer-events: auto;
         }
 
         #unlock-btn:hover {
-            background: var(--gold);
-            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.5);
-            transform: scale(1.1);
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 40px rgba(255,255,255,0.4);
         }
 
-        .instruction {
-            margin-top: 40px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        /* --- Pantalla Final --- */
+        /* --- Final Screen --- */
         #final-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
             z-index: 100;
+            padding: 60px 20px;
             overflow-y: auto;
-            padding: 80px 20px;
-            pointer-events: none;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
         }
 
-        #final-screen.visible { opacity: 1; pointer-events: auto; }
+        #final-screen.visible { display: flex; animation: fadeIn 1.5s; }
 
-        .story-node {
-            display: flex;
-            align-items: center;
-            gap: 40px;
+        .letter-container {
+            width: 95%;
+            max-width: 850px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            margin-bottom: 60px;
+        }
+
+        .letter-content {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.9);
+            text-align: left;
+        }
+
+        .letter-content p { margin-bottom: 30px; }
+
+        .letter-img {
             width: 100%;
-            max-width: 1000px;
-            margin-bottom: 150px;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s ease-out;
-        }
-
-        .story-node.reveal-active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Indicador de Scroll */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            color: var(--gold);
-            animation: bounce 2s infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        .story-node:nth-child(even) { flex-direction: row-reverse; }
-
-        .polaroid-card {
-            flex: 1;
-            max-width: 380px;
-            background: white;
-            padding: 12px 12px 35px 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 40px auto;
+            display: block;
+            border: 12px solid #fff;
+            border-bottom: 40px solid #fff;
+            border-radius: 5px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             transform: rotate(-2deg);
+            transition: transform 0.3s;
         }
 
-        .story-node:nth-child(even) .polaroid-card { transform: rotate(2deg); }
+        .letter-img:nth-of-type(even) { transform: rotate(2deg); }
+        .letter-img:hover { transform: rotate(0deg) scale(1.05); }
 
-        .polaroid-card img { width: 100%; }
-
-        .story-content {
-            flex: 1;
+        .highlight-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            color: #555;
+            font-size: 3.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        .highlight-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--gold);
+            display: block;
+            text-align: center;
+            margin: 40px 0;
+            line-height: 1.2;
+        }
+
+        .signature {
+            margin-top: 60px;
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--gold);
             line-height: 1.3;
         }
 
-        /* Sobre Interactivo */
-        #envelope-wrapper {
-            margin-top: 50px;
-            perspective: 1000px;
-            cursor: pointer;
-            padding-bottom: 100px;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        #envelope {
-            width: 300px;
-            height: 200px;
-            background: var(--cream);
-            border: 2px solid var(--gold);
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 1s;
-        }
-
-        #envelope::after {
-            content: '✉️';
-            position: absolute;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 3rem;
-        }
-
-        #letter {
-            position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            transform: translateZ(-1px);
-            transition: transform 1s, opacity 1s;
-            opacity: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #envelope-wrapper.open #letter {
-            transform: translateZ(50px) translateY(-150px) scale(1.5);
-            opacity: 1;
-            z-index: 200;
-        }
-
-        @media (max-width: 800px) {
-            #prism-wrapper { flex-direction: column; gap: 20px; }
-            .story-node, .story-node:nth-child(even) { flex-direction: column; text-align: center; }
-            .polaroid-card { width: 90vw; transform: rotate(0deg) !important; }
-            #letter { width: 100%; }
+        @media (max-width: 600px) {
+            .title-18 { font-size: 3.5rem; }
+            .letter-container { padding: 30px; border-radius: 20px; }
+            .letter-content { font-size: 1.05rem; line-height: 1.8; }
+            .highlight-title { font-size: 2.5rem; }
+            .highlight-text { font-size: 2.2rem; }
+            .signature { font-size: 2.2rem; }
+            .letter-img { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <div id="celebration-bg"></div>
+    <div id="bg-canvas"></div>
 
     <div id="main-viewport">
-        <div id="prism-wrapper">
-            <div id="prism-container" onclick="handleFlip()">
-                <div class="prism-face face-1"><img src="img/foto1.jpg"></div>
-                <div class="prism-face face-2"><img src="img/foto2.jpg"></div>
-                <div class="prism-face face-3"><img src="img/foto3.jpg"></div>
-            </div>
-            <button id="unlock-btn" onclick="unlock()">¡Desbloquear Mi Regalo! ✨</button>
+        <h1 class="title-18">18 Años</h1>
+        <p class="subtitle">Para el hombrecito más increíble</p>
+        
+        <div id="prism-container" onclick="handleFlip()">
+            <div class="prism-face face-1"><img src="img/foto1.jpg"></div>
+            <div class="prism-face face-2"><img src="img/foto2.jpg"></div>
+            <div class="prism-face face-3"><img src="img/foto3.jpg"></div>
         </div>
-        <p class="instruction">Haz girar los recuerdos para desbloquear... ✨</p>
+        
+        <p id="instruction" style="font-style: italic; opacity: 0.5; margin-bottom: 20px; font-weight: 300;">Toca los recuerdos para desbloquear...</p>
+        <button id="unlock-btn" onclick="unlock()">ABRIR MI REGALO ✨</button>
     </div>
 
     <div id="final-screen">
-        <h1 style="font-family: 'Playfair Display', serif; color: var(--rose-gold); font-size: 4rem; margin-bottom: 80px;">¡Feliz Cumpleaños!</h1>
-        <div class="scroll-indicator">▼</div>
-        
-        <div class="story-node">
-            <div class="polaroid-card"><img src="img/foto2.jpg"></div>
-            <div class="story-content">"Donde todo comenzó... el inicio de nuestra magia."</div>
-        </div>
-        <div class="story-node">
-            <div class="polaroid-card"><img src="img/foto1.jpg"></div>
-            <div class="story-content">"Creciendo y llenando cada día con tu luz única."</div>
-        </div>
-        <div class="story-node">
-            <div class="polaroid-card"><img src="img/foto3.jpg"></div>
-            <div class="story-content">"Hoy celebro a la persona maravillosa que eres."</div>
-        </div>
+        <div class="letter-container">
+            <div class="letter-content">
+                <span class="highlight-title">¡Feliz Cumpleaños, Mi Chico!</span>
+                
+                <p>Feliz cumpleaños al hombrecito más increíble del mundo, hoy cumples 18 añossssssss! Hombrecito mio estoy muy orgullosa de hombre que te estas convirtiendo, un hombrecito de Dios, eres un hombre increíble que le gusta ayudar a las personas por obra de Diosito, este día 24 de abril quiero decirte que de todo corazóncito estoy muy feliz que hayas llegado hasta acá con mucho esfuerzo lo hiciste y por todo el esfuerzo que haces en ser mejor eres increíble, reconozco todo lo que haces mochito y eres incluso mi ejemplo a seguir. Eres un hombrecito admirable para mi y agradezco a Diosito por llevarme de camino a conocerte a ti, un hombrecito que alegró mis días, mejoró mi ánimo y siento que poco a poco mejoró muchas más cosas que nunca sabía, pero aprendí de ti y sigo aprendiendo de ti, gracias por darme ánimos, gracias por tu cariñito y tu apoyo incondicional, gracias por existir mi chico.</p>
 
-        <!-- Sobre Mágico -->
-        <div id="envelope-wrapper" onclick="this.classList.toggle('open')">
-            <p style="font-family: 'Dancing Script'; margin-bottom: 20px;">Tengo algo más para ti...</p>
-            <div id="envelope">
-                <div id="letter">
-                    <p style="font-family: 'Dancing Script'; font-size: 1.2rem; color: #b76e79;">
-                        "Gracias por ser mi compañero de vida. Me haces muy feliz cada día. ¡Te amo muchísimo! Feliz cumpleaños." ❤️
-                    </p>
-                    <p style="margin-top: 10px; font-size: 0.8rem; font-weight: bold; color: var(--gold);">– Con todo mi amor</p>
+                <img src="img/foto2.jpg" class="letter-img" alt="Recuerdo 1">
+
+                <p>Y de verdad, mochito… no hay día que no le agradezca a Diosito por haberte cruzado en mi vida. Porque contigo aprendí que el amor se siente calientito en el pecho, que da paz, que no asusta. Me haces sentir segura solo con tu voz, y eso no tiene precio.</p>
+
+                <p>18 años, amor. Estás entrando a una etapa bien bonita y yo me muero de ganas de verte cumplir todo lo que sueñas. Si alguna vez te sientes chiquito o con miedo, acuérdate que aquí está tu Angisita para recordarte lo gigante que eres. Porque sí, eres gigante por dentro.</p>
+
+                <span class="highlight-text">Feliz 18 años amorcito<br>Feliz cumpleañossssss</span>
+                
+                <img src="img/foto1.jpg" class="letter-img" alt="Recuerdo 2">
+
+                <p>Espero este mensajito nunca olvides. Yo tu angisita te tiene siempre presente y te tendré siempre en mi corazóncito y en cada acto que haga en mi vida. Te llevo en mis oraciones, en mis planes, en mis ganas de ser mejor. Porque desde que estás tú, yo también quiero ser mi mejor versión.</p>
+
+                <p>Me siento muy agradecida con el Cielito por permitirme conocer un amor tan bonito y un chico magnífico cómo tú en mi vida. Un amor que cuida, que suma, que no lastima. Eso es lo que me das tú todos los días.</p>
+
+                <p>Te amo mi chuckysito ❤️ Con todo lo que soy, con todo lo que tengo. Hoy celebra duro, ríete hasta que te duela la pancita y pide un deseo bien grande. Yo ya pedí el mío: que Diosito te regale vida, salud y que me deje acompañarte muchos años más. </p>
+
+                <img src="img/foto3.jpg" class="letter-img" alt="Recuerdo 3">
+
+                <p>Y mochito, de verdad te lo digo desde lo más profundo de mi corazóncito: eres mi lugar seguro. Cuando el mundo se pone feo, pienso en ti y todo se calma. Eres ese abrazo que necesito sin pedirlo, esa risa que me arregla el día, esa paz que no sabía que me hacía falta.</p>
+
+                <p>18 años y ya marcas vidas, marcaste la mía. Gracias por elegirme cada día, por quedarte, por quererme bonito. Prometo estar para ti en tus días buenos y también en los que se pongan grises, para recordarte lo valiente y luminoso que eres.</p>
+
+                <p>Que Diosito te llene de bendiciones, que te cuide en cada paso y que todos tus sueños se hagan realidad. Yo voy a estar aquí aplaudiéndote, orando por ti y amándote con todo lo que soy.</p>
+
+                <p>No te me vayas a olvidar nunca, ¿ya? Porque yo no podría. Eres mi regalo del Cielito, mi milagro chiquito, mi ángelito de la guardia, mi todo.</p>
+
+                <div class="signature">
+                    Feliz vida, mi hombrecito. Hoy y siempre.<br>
+                    Tu Angisita que te ama más de lo que las palabritas pueden decir 🤍
                 </div>
+                
+                <p style="text-align: center; margin-top: 60px; font-style: italic; opacity: 0.6; font-size: 0.9rem;">Guárdame aquí, pegadito a tu corazón, ¿ya?</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Sparkles Mouse Magic
+        // Animación de estrellas
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDelay = Math.random() * 10 + 's';
+            document.body.appendChild(star);
+        }
+
+        // Sparkles Mouse
         document.addEventListener('mousemove', function(e) {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
@@ -348,19 +332,6 @@
             setTimeout(() => sparkle.remove(), 1000);
         });
 
-        // Crear Globos
-        const bg = document.getElementById('celebration-bg');
-        const items = ['🎈', '✨', '☁️', '🎈', '💖'];
-        for (let i = 0; i < 15; i++) {
-            const el = document.createElement('div');
-            el.className = 'balloon';
-            el.innerHTML = items[Math.floor(Math.random() * items.length)];
-            el.style.left = Math.random() * 90 + 'vw';
-            el.style.top = Math.random() * 80 + 'vh';
-            el.style.animationDelay = Math.random() * 5 + 's';
-            bg.appendChild(el);
-        }
-
         let rotation = 0;
         let flips = 0;
 
@@ -369,8 +340,9 @@
             flips++;
             document.getElementById('prism-container').style.transform = `rotateY(${rotation}deg)`;
             
-            if (flips >= 4) {
+            if (flips >= 3) {
                 document.getElementById('unlock-btn').classList.add('visible');
+                document.getElementById('instruction').style.opacity = '0';
             }
         }
 
@@ -379,41 +351,33 @@
             setTimeout(() => {
                 document.getElementById('final-screen').classList.add('visible');
                 launchConfetti();
-                initScrollReveal();
-            }, 800);
+            }, 1000);
         }
-
-        function initScrollReveal() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('reveal-active');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.story-node, #envelope-wrapper').forEach(node => {
-                observer.observe(node);
-            });
-        }
-
-        // Parallax Effect on scroll
-        document.getElementById('final-screen').addEventListener('scroll', function(e) {
-            const scrolled = e.target.scrollTop;
-            const balloons = document.querySelectorAll('.balloon');
-            balloons.forEach((b, index) => {
-                const speed = 0.2 + (index * 0.05);
-                b.style.transform = `translateY(${-(scrolled * speed)}px) rotate(${scrolled * 0.05}deg)`;
-            });
-        });
 
         function launchConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#D4AF37', '#B76E79', '#FFF']
-            });
+            const end = Date.now() + (15 * 1000);
+            const colors = ['#D4AF37', '#ffffff', '#B76E79'];
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
     </script>
 </body>
